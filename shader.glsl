@@ -8,7 +8,7 @@ void main(void) {
 }
 
 // Fragment Shader
-precision mediump float;
+precision highp float;
 uniform vec2 iResolution; // Uniform for resolution
 uniform float iTime; // Uniform for time
 uniform vec2 iMouse; // Uniform for mouse position
