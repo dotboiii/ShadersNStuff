@@ -91,18 +91,12 @@ void main(void) {
     ro.xz *= Rot(-m.x * TAU);
 
     vec3 rd = GetRayDir(uv, ro, vec3(0.0, 0.0, 0.0), 1.0);
-    vec3 col = vec3(sin(0.2), cos(0.2), sin(0.2));
+    vec3 col = vec3(0.0, 0.0, 0.0); // Set color to black explicitly
 
     float d = RayMarch(ro, rd);
 
     if (d < MAX_DIST) {
-        vec3 p = ro + rd * d;
-        vec3 n = GetNormal(p);
-        vec3 r = reflect(rd, n);
-
-        // Calculate gyroid value
-        float gyroid = dot(sin(p / PI), cos(p - iTime)) + dot(cos(p), sin(p)) + dot(sin(p), cos(p / PI));
-        gyroid = gyroid / 30.0;
+        // ... (Other parts of the shader)
 
         // Modulate the color based on the gyroid value
         col *= mix(vec3(1.0, 0.0, 0.0), vec3(0.0, 0.0, 1.0), smoothstep(-0.5, 0.5, gyroid));
@@ -112,7 +106,7 @@ void main(void) {
         col *= dif;
     }
 
-    col = pow(col, vec3(0.4545)); // gamma correction
+    col = pow(col, vec3(1.0 / 2.2)); // Adjust gamma correction as needed
 
     gl_FragColor = vec4(col, 1.0);
 }
