@@ -2,7 +2,6 @@
 attribute vec2 aVertexPosition;
 uniform vec2 iResolution; // Uniform for resolution
 
-
 void main(void) {
     gl_Position = vec4(aVertexPosition, 0, 1.0);
 }
@@ -17,7 +16,7 @@ uniform vec2 iMouse; // Uniform for mouse position
 #define MAX_DIST 100.0
 #define SURF_DIST 0.001
 #define TAU 6.283185
-#define PI 3.14
+#define PI 3.14159265359
 #define S smoothstep
 
 mat2 Rot(float a) {
@@ -25,10 +24,10 @@ mat2 Rot(float a) {
     return mat2(c, -s, s, c);
 }
 
-
 float sdSphere(vec3 p, float r) {
     return length(p) - r;
 }
+
 float sdBoxWithWaves(vec3 p, vec3 s, float wavelength, float amplitude) {
     p = abs(p) - s;
 
@@ -39,37 +38,38 @@ float sdBoxWithWaves(vec3 p, vec3 s, float wavelength, float amplitude) {
 
     return length(max(p, 0.0)) + min(max(p.x, max(p.y, p.z)), 0.0);
 }
+
 float GetDist(vec3 p) {
     float box = sdBoxWithWaves(p, vec3(1.0), 1.0, 0.1);
     float sphere = sdSphere(p, 1.0);
-    //create a gyroid
+    // create a gyroid
     float gyroid = dot(sin(p), cos(p)) + dot(cos(p), sin(p)) + dot(sin(p), cos(p));
-    gyroid = gyroid / 9.0+sin(0.01-(PI*0.01));
-    float modulation = sin(iTime*0.1)*0.5;
-    //modulate the gyroid to the constraints of the sphere and box
-    float d = smoothstep(tan(box), gyroid, .5);
+    gyroid = gyroid / 9.0 + sin(0.01 - (PI * 0.01));
+    float modulation = sin(iTime * 0.1) * 0.5;
+    // modulate the gyroid to the constraints of the sphere and box
+    float d = smoothstep(tan(box), gyroid, 0.5);
 
     return d;
 }
 
 float RayMarch(vec3 ro, vec3 rd) {
     float dO = 0.0;
-    
+
     for (int i = 0; i < MAX_STEPS; i++) {
         vec3 p = ro + rd * dO;
         float dS = GetDist(p);
         dO += dS;
         if (dO > MAX_DIST || abs(dS) < SURF_DIST) break;
     }
-    
+
     return dO;
 }
 
 vec3 GetNormal(vec3 p) {
     vec2 e = vec2(0.001, 0.0);
-    vec3 n = GetDist(p) - 
+    vec3 n = GetDist(p) -
         vec3(GetDist(p - e.xyy), GetDist(p - e.yxy), GetDist(p - e.yyx));
-    
+
     return normalize(n);
 }
 
@@ -89,10 +89,10 @@ void main(void) {
     vec3 ro = vec3(0.1, 0.1, 0.1);  // Adjust the position as needed
     ro.yz *= Rot(-m.y * PI + 1.0);
     ro.xz *= Rot(-m.x * TAU);
-    
+
     vec3 rd = GetRayDir(uv, ro, vec3(0.0, 0.0, 0.0), 1.0);
     vec3 col = vec3(sin(0.2), cos(0.2), sin(0.2));
-   
+
     float d = RayMarch(ro, rd);
 
     if (d < MAX_DIST) {
@@ -111,8 +111,8 @@ void main(void) {
         float dif = dot(n, normalize(vec3(1.0, 2.0, 3.0))) * 0.5 + 0.5;
         col *= dif;
     }
-    
+
     col = pow(col, vec3(0.4545)); // gamma correction
-    
+
     gl_FragColor = vec4(col, 1.0);
 }
