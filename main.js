@@ -138,7 +138,7 @@ document.addEventListener('DOMContentLoaded', function () {
         var iResolution = gl.getUniformLocation(program, 'iResolution'); //resolution
         var iMouse = gl.getUniformLocation(program, 'iMouse'); //mouse position
         var uRotation = gl.getUniformLocation(program, 'uRotation'); //rotation
-        var Texture = gl.getUniformLocation(program, 'Texture'); //texture
+        var Texture = gl.getUniformLocation(program, 'Texture'); //texture Not implemented yet
 
 
 
