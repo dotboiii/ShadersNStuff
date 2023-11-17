@@ -108,11 +108,11 @@ void main(void) {
         col *= mix(vec3(1.0, 0.0, 0.0), vec3(0.0, 0.0, 1.0), smoothstep(-0.5, 0.5, gyroid));
 
         // Lighting calculation based on the gyroid value
-        float dif = dot(n, normalize(vec3(1.0, 2.0, 3.0))) * 0.5 + 0.5;
+        float dif = dot(n, normalize(vec3(1, 2.0, 3.0))) * 0.5 + 0.5;
         col *= dif;
     }
 
-    col = pow(col, vec3(0.4545)); // gamma correction
+    col = pow(col, vec3(0.1545)); // gamma correction
 
     gl_FragColor = vec4(col, 1.0);
 }
